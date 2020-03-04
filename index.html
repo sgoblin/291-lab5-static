@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Voltmeter</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+
+<body>
+  <script src="https://www.desmos.com/api/v1.4/calculator.js?apiKey=dcb31709b452b1cf9dc26972add0fda6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+  <div id="calculator" style="width: 1200px; height: 400px;"></div>
+
+
+  <script>
+    function reloadPhasors() {
+      $.ajax({
+        dataType: "json",
+        url: "http://lab5.sgoblin.com/data.txt",
+        cache: false,
+        success: function (data) {
+          calculator.setExpression({ id: "graph3", latex: 'a_1=' + data['p'] });
+          calculator.setExpression({ id: "graph4", latex: 'a_2=' + data['s'] });
+          calculator.setExpression({ id: "graph5", latex: 'f=' + (17463.6 / data['T'] - 0.166) });
+          calculator.setExpression({ id: "graph6", latex: 'p=' + data['Ph'] });
+        }
+      });
+    }
+    window.setInterval(reloadPhasors, 500);
+
+    var elt = document.getElementById('calculator');
+    var calculator = Desmos.GraphingCalculator(elt);
+    calculator.setMathBounds({
+      left: -0.1,
+      right: 0.1,
+      bottom: -5,
+      top: 5
+    });
+    calculator.setExpression({ id: 'graph1', latex: 'y=a_{1}\\cos(2\\pi fx)' });
+    calculator.setExpression({ id: 'graph2', latex: 'y=a_{2}\\cos(2\\pi fx+\\frac{p\\pi}{180})' });
+    calculator.setExpression({ id: "graph3", latex: 'a_1=1' });
+    calculator.setExpression({ id: "graph4", latex: 'a_2=1' });
+    calculator.setExpression({ id: "graph5", latex: 'f=1' });
+    calculator.setExpression({ id: "graph6", latex: 'p=1' });
+  </script>
+
+
+</body>
+
+</html>
